@@ -6,7 +6,418 @@
 이는 클라우드 네이티브 애플리케이션의 개발에 요구되는 체크포인트들을 통과하기 위한 예시 답안을 포함합니다.
 - 체크포인트 : https://workflowy.com/s/assessment-check-po/T5YrzcMewfo4J6LW
 ![스크린샷(21)](https://user-images.githubusercontent.com/88135129/226492630-fbd77baa-5c46-48cd-a6a4-293c549a7c02.png)
+gitpod /workspace/deliveryProject (main) $ http POST :8081/orders storeId="001" foodId="01" customerId="sol" address="anyang"
+HTTP/1.1 201 
+Connection: keep-alive
+Content-Type: application/json
+Date: Mon, 20 Mar 2023 07:01:41 GMT
+Keep-Alive: timeout=60
+Location: http://localhost:8081/orders/1
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 
+{
+    "_links": {
+        "cancel": {
+            "href": "http://localhost:8081/fronts/1/cancel"
+        },
+        "order": {
+            "href": "http://localhost:8081/fronts/1"
+        },
+        "self": {
+            "href": "http://localhost:8081/fronts/1"
+        }
+    },
+    "address": "anyang",
+    "customerId": "sol",
+    "foodId": 01,
+    "status": "ORDERED",
+    "storeId": 001
+}
+
+//결제 상태
+gitpod /workspace/deliveryProject  (main) $  http GET :8082/payments/1   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:03:11 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+
+{
+    "_links": {
+        "payment": {
+            "href": "http://localhost:8082/payments/1"
+        },
+        "self": {
+            "href": "http://localhost:8082/payments/1"
+        }
+    },
+    "orderId": 1,
+    "status": "WAIT"
+}
+
+//주문
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:03:40 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "ORDER_PLACED"
+}
+
+ //PUT 결제
+gitpod /workspace/deliveryProject (main) $ http PUT :8082/payments/1/pay   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:04:02 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "id": 1,
+    "orderId": 1,
+    "status": "PAID.."
+}
+
+//주문 status
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:04:50 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "ORDER_PAID"
+}
+
+//store에서 주문 확인
+gitpod /workspace/deliveryProject (main) $ http GET :8083/cookings/1    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:05:14 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "accept": {
+            "href": "http://localhost:8083/cookings/1/accept"
+        },
+        "cooking": {
+            "href": "http://localhost:8083/cookings/1"
+        },
+        "finish": {
+            "href": "http://localhost:8083/cookings/1/finish"
+        },
+        "reject": {
+            "href": "http://localhost:8083/cookings/1/reject"
+        },
+        "self": {
+            "href": "http://localhost:8083/cookings/1"
+        },
+        "start": {
+            "href": "http://localhost:8083/cookings/1/start"
+        }
+    },
+    "address": "anyang",
+    "customerId": "sol",
+    "foodId": 01,
+    "orderId": 1,
+    "status": "READY",
+    "storeId": 001
+}
+
+
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1 
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:05:42 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "ORDER_PAID"
+}
+
+
+gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/accept
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:06:13 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+   
+
+{
+    "address": "anyang",
+    "customerId": "sol",
+    "foodId": 01,
+    "id": 1,
+    "orderId": 1,
+    "status": "ACCEPTED",
+    "storeId": 001
+}
+
+
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:07:04 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "COOK_ACCEPTED"
+}
+
+//store에서 요리 시작
+gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/start    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:08:02 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "address": "anyang",
+    "customerId": "sol",
+    "foodId": 01,
+    "id": 1,
+    "orderId": 1,
+    "status": "STARTED",
+    "storeId": 001
+}
+
+//주문상태 확인 (조리 시작됨)
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:08:50 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "COOK_STARTED"
+}
+
+//가게의 조리 완료
+gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/finish  
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:09:35 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+
+{
+    "address": "anyang",
+    "customerId": "sol",
+    "foodId": 01,
+    "id": 1,
+    "orderId": 1,
+    "status": "FINISHED",
+    "storeId": 001
+}
+
+//주문상태
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:09:50 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "COOK_FINISHED"
+}
+
+//배송 대기 상태
+gitpod /workspace/deliveryProject (main) $ http GET :8084/deliveries/1    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:10:18 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "confirm": {
+            "href": "http://localhost:8084/deliveries/1/confirm"
+        },
+        "delivery": {
+            "href": "http://localhost:8084/deliveries/1"
+        },
+        "pick": {
+            "href": "http://localhost:8084/deliveries/1/pick"
+        },
+        "self": {
+            "href": "http://localhost:8084/deliveries/1"
+        }
+    },
+    "address": "anyang",
+    "orderId": 1,
+    "status": "ADDED"
+}
+
+//배송기사의 배송 시작
+gitpod /workspace/deliveryProject (main) $ http PUT :8084/deliveries/1/pick   
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:11:02 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "address": "anyang",
+    "id": 1,
+    "orderId": 1,
+    "status": "STARTED"
+}
+
+//주문상태 (배송 시작)
+gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1  
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/hal+json
+Date: Mon, 20 Mar 2023 07:11:32 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+
+{
+    "_links": {
+        "myPage": {
+            "href": "http://localhost:8085/myPages/1"
+        },
+        "self": {
+            "href": "http://localhost:8085/myPages/1"
+        }
+    },
+    "orderId": 1,
+    "status": "DELIVERY_STARTED"
+}
+
+//customer가 배송확인
+gitpod /workspace/deliveryProject (main) $ http PUT :8084/deliveries/1/confirm    
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json;charset=UTF-8
+Date: Mon, 20 Mar 2023 07:12:32 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "address": "anyang",
+    "id": 1,
+    "orderId": 1,
+    "status": "FINISHED"
+}
 
 # Table of contents
 

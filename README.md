@@ -6,6 +6,7 @@
 이는 클라우드 네이티브 애플리케이션의 개발에 요구되는 체크포인트들을 통과하기 위한 예시 답안을 포함합니다.
 - 체크포인트 : https://workflowy.com/s/assessment-check-po/T5YrzcMewfo4J6LW
 ![스크린샷(21)](https://user-images.githubusercontent.com/88135129/226492630-fbd77baa-5c46-48cd-a6a4-293c549a7c02.png)
+```
 gitpod /workspace/deliveryProject (main) $ http POST :8081/orders storeId="001" foodId="01" customerId="sol" address="anyang"
 HTTP/1.1 201 
 Connection: keep-alive
@@ -21,22 +22,23 @@ Vary: Access-Control-Request-Headers
 {
     "_links": {
         "cancel": {
-            "href": "http://localhost:8081/fronts/1/cancel"
+            "href": "http://localhost:8081/orders/1/cancel"
         },
         "order": {
-            "href": "http://localhost:8081/fronts/1"
+            "href": "http://localhost:8081/orders/1"
         },
         "self": {
-            "href": "http://localhost:8081/fronts/1"
+            "href": "http://localhost:8081/orders/1"
         }
     },
-    "address": "anyang",
     "customerId": "sol",
+    "address": "anyang",
     "foodId": 01,
-    "status": "ORDERED",
-    "storeId": 001
+    "storeId": 001,
+    "status": 주문"
 }
-
+```
+```
 //결제 상태
 gitpod /workspace/deliveryProject  (main) $  http GET :8082/payments/1   
 HTTP/1.1 200 
@@ -49,7 +51,6 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 
-
 {
     "_links": {
         "payment": {
@@ -60,9 +61,10 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "WAIT"
+    "status": 대기"
 }
-
+```
+```
 //주문
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1    
 HTTP/1.1 200 
@@ -85,9 +87,10 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "ORDER_PLACED"
+    "status": "주문완료"
 }
-
+```
+```
  //PUT 결제
 gitpod /workspace/deliveryProject (main) $ http PUT :8082/payments/1/pay   
 HTTP/1.1 200 
@@ -98,11 +101,11 @@ Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
 {
-    "id": 1,
     "orderId": 1,
-    "status": "PAID.."
+    "status": "결제"
 }
-
+```
+```
 //주문 status
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1    
 HTTP/1.1 200 
@@ -125,9 +128,10 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "ORDER_PAID"
+    "status": "주문"
 }
-
+```
+```
 //store에서 주문 확인
 gitpod /workspace/deliveryProject (main) $ http GET :8083/cookings/1    
 HTTP/1.1 200 
@@ -161,15 +165,15 @@ Vary: Access-Control-Request-Headers
             "href": "http://localhost:8083/cookings/1/start"
         }
     },
-    "address": "anyang",
     "customerId": "sol",
+    "address": "anyang",
     "foodId": 01,
     "orderId": 1,
-    "status": "READY",
-    "storeId": 001
+    "storeId": 001,
+    "status": "준비"
 }
-
-
+```
+```
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1 
 HTTP/1.1 200 
 Connection: keep-alive
@@ -181,7 +185,6 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 
-
 {
     "_links": {
         "myPage": {
@@ -191,11 +194,10 @@ Vary: Access-Control-Request-Headers
             "href": "http://localhost:8085/myPages/1"
         }
     },
-    "orderId": 1,
-    "status": "ORDER_PAID"
+    "orderId": 1
 }
-
-
+```
+```
 gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/accept
 HTTP/1.1 200 
 Connection: keep-alive
@@ -203,19 +205,19 @@ Content-Type: application/json;charset=UTF-8
 Date: Mon, 20 Mar 2023 07:06:13 GMT
 Keep-Alive: timeout=60
 Transfer-Encoding: chunked
-   
 
 {
-    "address": "anyang",
     "customerId": "sol",
+    "address": "anyang",
     "foodId": 01,
     "id": 1,
     "orderId": 1,
-    "status": "ACCEPTED",
-    "storeId": 001
+    "storeId": 001,
+    "status": "주문승낙"
 }
 
-
+```
+```
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
 HTTP/1.1 200 
 Connection: keep-alive
@@ -237,9 +239,10 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "COOK_ACCEPTED"
+    "status": "주문승낙"
 }
-
+```
+```
 //store에서 요리 시작
 gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/start    
 HTTP/1.1 200 
@@ -250,15 +253,17 @@ Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
 {
-    "address": "anyang",
     "customerId": "sol",
+    "address": "anyang",
     "foodId": 01,
     "id": 1,
     "orderId": 1,
-    "status": "STARTED",
-    "storeId": 001
-}
+    "storeId": 001,
+    "status": "요리시작"
 
+}
+```
+```
 //주문상태 확인 (조리 시작됨)
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
 HTTP/1.1 200 
@@ -281,10 +286,11 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "COOK_STARTED"
+    "status": "요리시작"
 }
-
-//가게의 조리 완료
+```
+```
+//조리 완료
 gitpod /workspace/deliveryProject (main) $ http PUT :8083/cookings/1/finish  
 HTTP/1.1 200 
 Connection: keep-alive
@@ -293,17 +299,17 @@ Date: Mon, 20 Mar 2023 07:09:35 GMT
 Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
-
 {
-    "address": "anyang",
     "customerId": "sol",
+    "address": "anyang",
     "foodId": 01,
     "id": 1,
     "orderId": 1,
-    "status": "FINISHED",
-    "storeId": 001
+    "storeId": 001,
+    "status": "요리완료"
 }
-
+```
+```
 //주문상태
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1   
 HTTP/1.1 200 
@@ -316,7 +322,6 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 
-
 {
     "_links": {
         "myPage": {
@@ -327,10 +332,11 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "COOK_FINISHED"
+    "status": "요리완료"
 }
-
-//배송 대기 상태
+```
+```
+//배송 상태
 gitpod /workspace/deliveryProject (main) $ http GET :8084/deliveries/1    
 HTTP/1.1 200 
 Connection: keep-alive
@@ -359,10 +365,11 @@ Vary: Access-Control-Request-Headers
     },
     "address": "anyang",
     "orderId": 1,
-    "status": "ADDED"
+    "status": "픽업대기"
 }
-
-//배송기사의 배송 시작
+```
+```
+//rider 배송 시작
 gitpod /workspace/deliveryProject (main) $ http PUT :8084/deliveries/1/pick   
 HTTP/1.1 200 
 Connection: keep-alive
@@ -372,12 +379,13 @@ Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
 {
-    "address": "anyang",
     "id": 1,
+    "address": "anyang",
     "orderId": 1,
-    "status": "STARTED"
+    "status": "시작"
 }
-
+```
+```
 //주문상태 (배송 시작)
 gitpod /workspace/deliveryProject (main) $ http GET :8085/myPages/1  
 HTTP/1.1 200 
@@ -400,9 +408,10 @@ Vary: Access-Control-Request-Headers
         }
     },
     "orderId": 1,
-    "status": "DELIVERY_STARTED"
+    "status": "배달시작"
 }
-
+```
+```
 //customer가 배송확인
 gitpod /workspace/deliveryProject (main) $ http PUT :8084/deliveries/1/confirm    
 HTTP/1.1 200 
@@ -413,10 +422,10 @@ Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
 {
-    "address": "anyang",
     "id": 1,
+    "address": "anyang",
     "orderId": 1,
-    "status": "FINISHED"
+    "status": "배달완료"
 }
 
 # Table of contents
